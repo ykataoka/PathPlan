@@ -15,14 +15,22 @@
 #   0 = Navigable space
 #   1 = Occupied space
 
-grid = [[0, 0, 1, 0, 0, 0],
-        [0, 0, 1, 0, 0, 0],
+import pprint
+
+pp = pprint.PrettyPrinter(indent=4)
+
+grid = [[0, 1, 1, 1, 1, 1],
+        [0, 1, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 0],
-        [0, 0, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1, 0],
         [0, 0, 0, 0, 1, 0]]
 init = [0, 0]
 goal = [len(grid)-1, len(grid[0])-1]
 cost = 1
+
+# record the step at which each cell is checked
+expand = [[-1 for _col in range(len(grid[0]))] for _row in range(len(grid))]
+count = 0  # the number of step
 
 delta = [[-1, 0],  # go up
          [0, -1],  # go left
@@ -38,13 +46,13 @@ def search(grid, init, goal, cost):
     # ----------------------------------------
 
     # define the array for 'done or not'
-    closed = [[0 for _row in range(len(grid[0]))] for _col in range(len(grid))]
+    closed = [[0 for _col in range(len(grid[0]))] for _row in range(len(grid))]
     closed[init[0]][init[1]] = 1
-#    expand = [[-1 for row in range(len(grid[0]))] for col in range(len(grid))]
-#    action = [[-1 for row in range(len(grid[0]))] for col in range(len(grid))]
+    action = [[-1 for row in range(len(grid[0]))] for col in range(len(grid))]
 
     row, col = init
     g = 0  # g-value (the number of step)
+    expand[row][col] = 0
     count = 1
     open = [[g, row, col]]
 
@@ -68,11 +76,15 @@ def search(grid, init, goal, cost):
             col = next[2]
             g = next[0]
 
+            # update expand (step matrix)
+            expand[row][col] = count
+            count += 1
+
             # complete condition
             if row == goal[0] and col == goal[1]:
-                found = True
-                return [g, row, col]
-            
+                flg_found = True
+                # pp.pprint(expand) 
+
             # else, add the next step to open
             else:
                 for i in range(len(delta)):  # apply all the pattern
@@ -88,10 +100,23 @@ def search(grid, init, goal, cost):
                             g2 = g + cost  # update g-value
                             open.append([g2, row2, col2])  # add new step to open
                             closed[row2][col2] = 1  # update closed
+                            action[row2][col2] = i  # record delta type which led to new place
 
-    # outcome
-    path = g
+    # Visulize the path history
+    policy = [[' ' for _row in range(len(grid[0]))] for _col in range(len(grid))]
+    row, col = goal
+    policy[row][col] = '*'
+
+    # search in backward!!
+    while row != init[0] or col != init[1]:
+        row2 = row - delta[action[row][col]][0]
+        col2 = col - delta[action[row][col]][1]
+        policy[row2][col2] = delta_name[action[row][col]]
+        row = row2
+        col = col2
+
+    pp.pprint(policy)
     
-    return path
+    return [g, row2, col2]
 
-print(search(grid, init, goal, cost))
+search(grid, init, goal, cost)
