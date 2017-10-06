@@ -23,14 +23,18 @@ grid = [[0, 0, 1, 0, 0, 0],
         [0, 0, 1, 0, 1, 0],
         [0, 0, 1, 0, 1, 0],
         [0, 0, 1, 0, 1, 0]]
+
+# initial position
 init = [0, 0]
+
+# goal position
 goal = [len(grid)-1, len(grid[0])-1]
 cost = 1
 
-delta = [[-1, 0 ], # go up
-         [ 0, -1], # go left
-         [ 1, 0 ], # go down
-         [ 0, 1 ]] # go right
+delta = [[-1, 0],  # go up
+         [0, -1],  # go left
+         [1, 0],  # go down
+         [0, 1]]  # go right
 
 delta_name = ['^', '<', 'v', '>']
 
@@ -66,6 +70,7 @@ def search(grid, init, goal, cost):
             expand[x][y] = count
             count += 1
 
+            
             if x == goal[0] and y == goal[1]:
                 found = True
             else:
