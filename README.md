@@ -36,15 +36,6 @@ The vehicle state and some methods are contained in the Vehicle
 class.(vehicle.cpp) The newly streamed data is used to update the
 vehicle object. The position and velocity is computed on both Cartesian x,y coodinated and Frenet s,d coodinates.
 
---
-The simulator returns instantaneous telemetry data for the ego vehicle, but it also returns the list of points from previously generated path. This is used to project the car's state into the future and a "planning state" is determined based on the difference between points at some prescribed number of points along the previous path. In effect, this can help to generate smoother transitions, handle latency from transmission between the controller and the simulator, and alleviate the trajectory generator of some computation overhead.
-
-These methods include update_available_states (i.e. "keep lane", "lane
-change left", "lane change right"), get_target_for_state,
-generate_trajectory_for_target, get_leading_vehicle_data_for_lane, and
-generate_predictions (for sensor fusion data).
---
-
 3. Generate Predictions for other cars.
 
 The information fo the other cars surrounding the target car is also
