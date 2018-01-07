@@ -544,7 +544,6 @@ int main() {
 	      next_x_vals.push_back(interpolated_x_traj[i]);
 	      next_y_vals.push_back(interpolated_y_traj[i]);
 	    } 
-
 	    
 	    // FINALIZE THE (x,y) trajectory
 
